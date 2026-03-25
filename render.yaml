@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: credit-xai-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt && pip install huggingface_hub
+    startCommand: python download_models.py && uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: HF_REPO
+        value: your-hf-username/credit-xai-models   # ← change this
+      - key: HF_TOKEN
+        sync: false                                  # set in Render dashboard (secret)
+    healthCheckPath: /
