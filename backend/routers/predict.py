@@ -10,24 +10,26 @@ router = APIRouter()
 
 
 def _run_one(data: ApplicantInput) -> PredictionResponse:
-    feature_names  = get_features()
-    feature_values = [getattr(data, f) for f in feature_names]
+
+    data_dict = data.model_dump(by_alias=True)
+    feature_names = get_features()
+    feature_values = [data_dict[f] for f in feature_names]
 
     prob, prediction = predict(feature_values, data.model)
-    shap_values      = get_shap_values(feature_values, data.model)
-    level            = risk_level(prob)
-    reason           = build_reason(shap_values, feature_names, prob)
+    shap_values = get_shap_values(feature_values, data.model)
+    level = risk_level(prob)
+    reason = build_reason(shap_values, feature_names, prob)
 
     return PredictionResponse(
-        default_probability = round(prob, 4),
-        prediction          = prediction,
-        risk_level          = level,
-        confidence          = round(max(prob, 1 - prob), 4),
-        shap_values         = shap_values,
-        feature_names       = feature_names,
-        feature_values      = feature_values,
-        reason_statement    = reason,
-        model_used          = data.model,
+        default_probability=round(prob, 4),
+        prediction=prediction,
+        risk_level=level,
+        confidence=round(max(prob, 1 - prob), 4),
+        shap_values=shap_values,
+        feature_names=feature_names,
+        feature_values=feature_values,
+        reason_statement=reason,
+        model_used=data.model,
     )
 
 
