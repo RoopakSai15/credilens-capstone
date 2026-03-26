@@ -9,44 +9,6 @@ Capstone project — Explainable AI loan-officer interface.
 
 ---
 
-## 1 — Save the scaler (one-time, in your notebook)
-
-After your `StandardScaler` fit, add:
-```python
-import joblib
-joblib.dump(scaler, "models/scaler.pkl")
-```
-Copy all `models/*.pkl` files into `backend/models/`.
-
----
-
-## 2 — Backend (FastAPI)
-
-```bash
-cd backend
-python -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn main:app --reload
-```
-
-API runs at **http://localhost:8000**  
-Interactive docs at **http://localhost:8000/docs**
-
----
-
-## 3 — Frontend (React + Vite)
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-App runs at **http://localhost:5173**
-
----
-
 ## API Endpoints
 
 | Method | Path | Description |
