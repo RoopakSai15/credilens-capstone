@@ -22,9 +22,6 @@ MODELS_DIR.mkdir(exist_ok=True)
 
 FILES = [
     "xgboost.pkl",
-    "lightgbm.pkl",
-    "random_forest.pkl",
-    "logistic_regression.pkl",
     "features.pkl",
     "scaler.pkl",
 ]

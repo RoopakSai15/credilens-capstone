@@ -22,9 +22,3 @@ class ApplicantInput(BaseModel):
         ..., ge=0, alias="NumberOfTime60-89DaysPastDueNotWorse"
     )
     NumberOfDependents: int = Field(..., ge=0)
-    model: Literal[
-        "xgboost",
-        "lightgbm",
-        "random_forest",
-        "logistic_regression",
-    ] = DEFAULT_MODEL

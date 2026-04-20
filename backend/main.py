@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from core.model_store import load_all
-from routers import predict, meta
+from routers import predict, meta, upload
 
 app = FastAPI(title="Credit Default XAI API", version="2.0.0")
 
@@ -13,14 +13,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load all models/scaler into memory once at startup
+
 @app.on_event("startup")
 async def startup():
     load_all()
 
-# Mount routers
+
 app.include_router(predict.router, prefix="/predict", tags=["Prediction"])
-app.include_router(meta.router,    prefix="/meta",    tags=["Metadata"])
+app.include_router(meta.router, prefix="/meta", tags=["Metadata"])
+app.include_router(upload.router, prefix="/upload", tags=["CSV Upload"])
+
 
 @app.get("/")
 def root():
