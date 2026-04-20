@@ -9,43 +9,51 @@ export default function RiskGauge({ result }) {
   const cfg = RISK_CONFIG[risk_level];
   const pct = Math.round(default_probability * 100);
 
-  // Arc math
-  const R = 80;
-  const cx = 110, cy = 110;
-  const startAngle = Math.PI;
-  const endAngle   = startAngle + (default_probability * Math.PI);
-  const x1 = cx + R * Math.cos(startAngle);
-  const y1 = cy + R * Math.sin(startAngle);
-  const x2 = cx + R * Math.cos(endAngle);
-  const y2 = cy + R * Math.sin(endAngle);
-  const largeArc = default_probability > 0.5 ? 1 : 0;
-  const arcPath = `M ${x1} ${y1} A ${R} ${R} 0 ${largeArc} 0 ${x2} ${y2}`;
+  // Arc math — clean semicircle gauge
+const R = 70;
+const cx = 110, cy = 90;
+
+// Track: always full semicircle, left to right across the top
+// Start = left point (30, 110), End = right point (190, 110)
+
+// Value arc sweeps from left, proportional to default_probability
+// Angle goes from 180° (left) to 0° (right) across the top
+const startRad = Math.PI;                                    // left point
+const endRad   = Math.PI - (default_probability * Math.PI); // sweeps right
+const x1 = cx + R * Math.cos(startRad);  // always left point
+const y1 = cy + R * Math.sin(startRad);
+const x2 = cx + R * Math.cos(endRad);
+const y2 = cy + R * Math.sin(endRad);
+const largeArc = default_probability > 0.5 ? 1 : 0;
+const arcPath = `M ${x1} ${y1} A ${R} ${R} 0 ${largeArc} 1 ${x2} ${y2}`;
 
   return (
     <div className="card result-card" style={{ borderLeft: `4px solid ${cfg.color}` }}>
       <div className="result-top">
         {/* Gauge */}
         <div className="gauge-wrap">
-          <svg viewBox="0 0 220 130" width="220" height="130">
-            {/* Track */}
-            <path
-              d={`M ${cx - R} ${cy} A ${R} ${R} 0 0 1 ${cx + R} ${cy}`}
-              fill="none" stroke="#e5e7eb" strokeWidth="14" strokeLinecap="round"
-            />
-            {/* Value arc */}
-            <path
-              d={arcPath}
-              fill="none" stroke={cfg.color} strokeWidth="14" strokeLinecap="round"
-            />
-            {/* Percentage */}
-            <text x={cx} y={cy - 8} textAnchor="middle" fontSize="28" fontWeight="700" fill={cfg.color}>
-              {pct}%
-            </text>
-            <text x={cx} y={cy + 14} textAnchor="middle" fontSize="11" fill="#6b7280">
-              Default Probability
-            </text>
-          </svg>
-        </div>
+  <div style={{ width: "220px" }}>
+    <div style={{
+      fontSize: "36px", fontWeight: "700", color: cfg.color, marginBottom: "6px"
+    }}>
+      {pct}%
+    </div>
+    <div style={{
+      background: "#e5e7eb", borderRadius: "999px", height: "12px", overflow: "hidden"
+    }}>
+      <div style={{
+        width: `${pct}%`,
+        height: "100%",
+        background: cfg.color,
+        borderRadius: "999px",
+        transition: "width 0.6s ease"
+      }} />
+    </div>
+    <div style={{ fontSize: "11px", color: "#6b7280", marginTop: "4px" }}>
+      Default Probability
+    </div>
+  </div>
+</div>
 
         {/* Risk badge */}
         <div className="risk-badge-wrap">
