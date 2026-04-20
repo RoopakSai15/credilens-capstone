@@ -19,7 +19,7 @@ export default function RiskGauge({ result }) {
   const x2 = cx + R * Math.cos(endAngle);
   const y2 = cy + R * Math.sin(endAngle);
   const largeArc = default_probability > 0.5 ? 1 : 0;
-  const arcPath = `M ${x1} ${y1} A ${R} ${R} 0 ${largeArc} 1 ${x2} ${y2}`;
+  const arcPath = `M ${x1} ${y1} A ${R} ${R} 0 ${largeArc} 0 ${x2} ${y2}`;
 
   return (
     <div className="card result-card" style={{ borderLeft: `4px solid ${cfg.color}` }}>
